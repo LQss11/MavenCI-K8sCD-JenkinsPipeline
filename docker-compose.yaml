@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  jenkins:
+    #image: jenkins/jenkins:lts
+    build:
+      context: ./jenkins
+      args:  
+        - MAVEN_V=${MAVEN_VERSION}  #Specify maven version in dotenv      
+    container_name: jenkins    
+    restart: always     
+    ports:
+      - '20080:8080'
+    volumes:
+      - jenkins_data:/var/jenkins_home
+    networks:
+      - cicd
+  kind:
+    build:
+      context: ./go  
+    #image:  golang:1.17-alpine -> alpine
+    container_name: kind
+    restart: always     
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /usr/bin/docker:/usr/bin/docker
+    tty: true        
+    networks:
+      - cicd        
+volumes:
+  jenkins_data:
+networks:
+  cicd:
