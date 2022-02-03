@@ -1,6 +1,6 @@
 FROM golang:1.17-alpine as kind
 RUN go install sigs.k8s.io/kind@v0.11.1
 
-FROM alpine as runtime 
+FROM docker:dind as runtime 
 COPY --from=kind /go/bin/kind /bin/kind
 ENTRYPOINT [ "sh" ]
