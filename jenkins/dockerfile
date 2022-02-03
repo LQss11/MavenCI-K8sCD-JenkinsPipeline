@@ -1,0 +1,24 @@
+FROM jenkins/jenkins:lts
+
+# Install docker pipeline plugin
+RUN jenkins-plugin-cli --plugins docker-workflow:1.27
+
+# install wget
+RUN apt-get update && apt-get install -y wget
+
+# install maven
+RUN tar xzf /tmp/apache-maven-$MAVEN_V-bin.tar.gz -C /opt/ \
+    && ln -s /opt/apache-maven-$MAVEN_V /opt/maven \
+    && ln -s /opt/maven/bin/mvn /usr/local/bin \
+    && rm -f /tmp/apache-maven-$MAVEN_V-bin.tar.gz
+
+RUN chown -R jenkins:jenkins /opt/maven
+
+# Setup maven home
+ENV MAVEN_HOME /opt/maven
+
+# remove download archive files
+RUN apt-get clean
+
+# volume for Jenkins settings
+VOLUME /var/jenkins_home
