@@ -1,10 +1,18 @@
 FROM jenkins/jenkins:lts
 
+ARG MAVEN_V
+
 # Install docker pipeline plugin
-RUN jenkins-plugin-cli --plugins docker-workflow:1.27
+#RUN jenkins-plugin-cli --plugins docker-workflow:1.27
+
+# change to root
+USER root
 
 # install wget
 RUN apt-get update && apt-get install -y wget
+
+# Download maven binaries
+RUN wget --no-verbose -O /tmp/apache-maven-$MAVEN_V-bin.tar.gz http://apache.cs.utah.edu/maven/maven-3/$MAVEN_V/binaries/apache-maven-$MAVEN_V-bin.tar.gz
 
 # install maven
 RUN tar xzf /tmp/apache-maven-$MAVEN_V-bin.tar.gz -C /opt/ \
