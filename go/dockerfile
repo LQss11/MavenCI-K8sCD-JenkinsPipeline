@@ -1,6 +1,26 @@
 FROM golang:1.17-alpine as kind
 RUN go install sigs.k8s.io/kind@v0.11.1
 
+
+# Download Kubectl binaries
+FROM alpine AS kubectl
+
+# Kubernetes version
+ARG ARCH=amd64
+ARG KUBERNETES_RELEASE=v1.23.3
+
+WORKDIR /usr/local/bin
+
+RUN apk --no-cache add curl
+
+RUN  curl -fsSLO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_RELEASE}/bin/linux/${ARCH}/kubectl \
+    && chmod +x kubectl
+
+# Final docker dind (alpine) image content
 FROM docker:dind as runtime 
+# Copy kind binaries
 COPY --from=kind /go/bin/kind /bin/kind
+# Copy kubectl binaries
+COPY --from=kubectl /usr/local/bin/kubectl /bin/kubectl
+
 ENTRYPOINT [ "sh" ]
