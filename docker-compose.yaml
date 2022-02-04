@@ -14,7 +14,7 @@ services:
     volumes:
       - jenkins_data:/var/jenkins_home
     networks:
-      - kind-net
+      - cicd
   cluster:
     build:
       context: ./go  
@@ -24,12 +24,16 @@ services:
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - /usr/bin/docker:/usr/bin/docker
+        - ./go/setup-kinds.sh:/setup-kinds.sh
     tty: true        
     networks:
-      - kind-net        
+      - kind-net
+      - cicd        
 volumes:
   jenkins_data:
 networks:
   kind-net:
     driver: bridge
     name: kind
+  cicd:
+    driver: bridge
