@@ -21,3 +21,8 @@ you can make sure that the cluster is working properly by running:
 docker exec -it kind-cluster sh -c "apk add curl && kubectl apply -f ./nginx-deployment.yaml && curl k8s-cluster-control-plane:30080" # you can also run the same curl but with k8s-cluster-worker dns
 ```
 >You can use dns of the kindest node containers to get the output
+
+Before stopping the stack you must need to remove the kind cluster containers created on your host machine for now by running:
+```sh
+docker exec -it kind-cluster kind delete cluster --name k8s-cluster # TODO add task on SIGTERM
+``` 
