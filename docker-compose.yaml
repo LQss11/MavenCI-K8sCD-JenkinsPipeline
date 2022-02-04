@@ -24,7 +24,7 @@ services:
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - /usr/bin/docker:/usr/bin/docker
-        - ./go/setup-kinds.sh:/setup-kinds.sh
+        - ./go/cluster-setup.sh:/cluster-setup.sh
     tty: true        
     networks:
       - kind-net
