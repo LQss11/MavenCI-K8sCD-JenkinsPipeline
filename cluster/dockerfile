@@ -11,7 +11,7 @@ ARG KUBERNETES_RELEASE=v1.23.3
 
 WORKDIR /usr/local/bin
 
-RUN apk --no-cache add curl
+RUN apk --no-cache add curl 
 
 RUN  curl -fsSLO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_RELEASE}/bin/linux/${ARCH}/kubectl \
     && chmod +x kubectl
@@ -23,4 +23,8 @@ COPY --from=kind /go/bin/kind /bin/kind
 # Copy kubectl binaries
 COPY --from=kubectl /usr/local/bin/kubectl /bin/kubectl
 
-ENTRYPOINT [ "sh" ]
+# Run ssh daemon
+RUN apk --no-cache add openssh-server
+EXPOSE 22
+RUN ssh-keygen -A
+CMD [ "sh","-c","/usr/sbin/sshd && sh"]
