@@ -17,14 +17,14 @@ services:
       - cicd
   cluster:
     build:
-      context: ./go  
-    #image:  golang:1.17-alpine -> alpine
+      context: ./cluster
+    #image:  golang:1.17-alpine -> docker dind alpine
     container_name: kind-cluster
     restart: always     
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - /usr/bin/docker:/usr/bin/docker
-        - ./go/cluster-setup.sh:/cluster-setup.sh
+        - ./cluster/cluster-setup.sh:/cluster-setup.sh
         - ./nginx-deployment.yaml:/nginx-deployment.yaml
     tty: true        
     networks:
