@@ -14,20 +14,22 @@ services:
     volumes:
       - jenkins_data:/var/jenkins_home
     networks:
-      - cicd
-  kind:
+      - kind-net
+  cluster:
     build:
       context: ./go  
     #image:  golang:1.17-alpine -> alpine
-    container_name: kind
+    container_name: kind-cluster
     restart: always     
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - /usr/bin/docker:/usr/bin/docker
     tty: true        
     networks:
-      - cicd        
+      - kind-net        
 volumes:
   jenkins_data:
 networks:
-  cicd:
+  kind-net:
+    driver: bridge
+    name: kind
