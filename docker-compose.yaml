@@ -24,8 +24,6 @@ services:
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - /usr/bin/docker:/usr/bin/docker
-        - ./cluster/cluster-setup.sh:/cluster-setup.sh
-        - ./nginx-deployment.yaml:/nginx-deployment.yaml
     tty: true        
     networks:
       - kind-net
