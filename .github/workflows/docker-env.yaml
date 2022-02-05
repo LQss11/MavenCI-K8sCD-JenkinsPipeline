@@ -30,7 +30,7 @@ jobs:
 
       # Check for jenkins and docker dind containers
       - name: Check running containers (Jenkins + docker dind)
-        run: docker run ps -a  
+        run: docker ps -a  
 
       # Create cluster
       - name: Create kind cluster with 2 control-plane nodes and 3 worker nodes
