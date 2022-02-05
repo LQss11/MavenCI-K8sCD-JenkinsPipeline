@@ -33,11 +33,15 @@ while read -p "How many worker nodes do you need in the cluster?:" worker; do
     break
 done
 
+echo "############################################################################"
+echo "$manager control-plane and $worker worker nodes will be joining the cluster"
+echo "############################################################################"
+
 # Create the cluster
 kind create cluster --name k8s-cluster --config kind-config.yaml
 
-# Update the k8s server api host+port depending on 
-# haproxy loadbalancerr or single control-plane 
+# Update the k8s server api host+port depending on
+# haproxy loadbalancerr or single control-plane
 if [[ $manager == 1 ]]; then
     kubectl config set clusters.kind-k8s-cluster.server https://k8s-cluster-control-plane:6443
 else
