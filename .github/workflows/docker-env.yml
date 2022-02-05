@@ -34,5 +34,5 @@ jobs:
         run: docker-compose up --build -d
         
       # Check for containers
-      - name: Run curl on jenkins address
-        run: curl localhost:20080
+      - name: Run docker ps
+        run: docker ps
