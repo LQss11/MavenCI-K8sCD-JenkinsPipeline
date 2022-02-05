@@ -18,10 +18,10 @@ docker exec -t kind-cluster sh -c "./content/scripts/deploy-nginx.sh"
 ```
 Before stopping the stack you must need to remove the kind cluster containers created on your host machine for now by running:
 ```sh
-docker exec -it kind-cluster kubectl delete -f ./nginx-deployment.yaml # To get rid of additional containers
+docker exec -it kind-cluster kubectl delete -f ./content/deployment/nginx-deployment.yaml # To get rid of additional containers
 docker exec -it kind-cluster kind delete cluster --name k8s-cluster # TODO add task on SIGTERM
 ``` 
-you can then stop the docker compose stakc by running:
+you can then stop the docker compose stack by running:
 ```sh
 docker-compose down
 ```
