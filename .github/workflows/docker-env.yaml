@@ -43,7 +43,8 @@ jobs:
       # Pull nginx image and apply deployment
       - name: Pull nginx and apply deployment
         # Could use kind load docker-image nginx:1 --name k8s-cluster to download image to avoid timout error
-        run: docker exec -i kind-cluster sh -c "apk --no-cache  add curl && kubectl apply -f ./nginx-deployment.yaml && kubectl wait --for=condition=ready pod -l app=nginx1.14.2 --timeout=30s && curl k8s-cluster-control-plane:30080"
+        # Also could use kubectl wait --for=condition=ready pod -l app=nginx1.14.2 --timeout=30s
+        run: docker exec -i kind-cluster sh -c "kind load docker-image nginx:1.14.2 --name k8s-cluster && kubectl apply -f ./nginx-deployment.yaml && apk --no-cache add curl && sleep 30 && curl k8s-cluster-control-plane:30080"
       
       # Check k8s resources
       - name: Get k8s resources
