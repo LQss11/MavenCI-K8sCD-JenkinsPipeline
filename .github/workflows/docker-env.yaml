@@ -1,5 +1,5 @@
 # Validate docker-compose stack
-name: CI
+name: Kind-Cluster-CI-CD
 
 # Controls when the workflow will run
 on:
