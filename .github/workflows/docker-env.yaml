@@ -52,11 +52,11 @@ jobs:
       
       # Delete deployment resources
       - name: Delete deployed resources
-        run: docker exec -i kind-cluster kubectl delete -f ./content/deployment/nginx-deployment.yaml
+        run: docker exec -i kind-cluster kubectl delete -f ./content/deployment/
 
       # Delete cluster
       - name: Delete kind cluster nodes
-        run: docker exec -it kind-cluster kind delete cluster --name k8s-cluster       
+        run: docker exec -i kind-cluster kind delete cluster --name k8s-cluster       
 
       # Stop docker compose stack
       - name: Delete kind cluster nodes
