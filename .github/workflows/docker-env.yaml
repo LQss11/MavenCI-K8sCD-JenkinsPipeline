@@ -52,7 +52,7 @@ jobs:
       
       # Delete deployment resources
       - name: Delete deployed resources
-        run: docker exec -i kind-cluster kubectl delete -f ./content/deployment/
+        run: docker exec -i kind-cluster kubectl delete -f ./content/deployments/
 
       # Delete cluster
       - name: Delete kind cluster nodes
