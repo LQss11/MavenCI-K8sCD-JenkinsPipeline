@@ -49,4 +49,15 @@ jobs:
       # Check k8s resources
       - name: Get k8s resources
         run: docker exec -i kind-cluster kubectl get all
-   
+      
+      # Delete deployment resources
+      - name: Delete deployed resources
+        run: docker exec -i kind-cluster kubectl delete -f ./content/deployment/nginx-deployment.yaml
+
+      # Delete cluster
+      - name: Delete kind cluster nodes
+        run: docker exec -it kind-cluster kind delete cluster --name k8s-cluster       
+
+      # Stop docker compose stack
+      - name: Delete kind cluster nodes
+        run: docker-compose down   
