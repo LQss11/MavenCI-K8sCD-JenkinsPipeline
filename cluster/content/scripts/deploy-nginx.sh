@@ -1,12 +1,16 @@
 #!/bin/sh
+# Pull required images
 docker image pull nginx:1.14.2
-# Download image
+docker image pull jenkins/jenkins:lts
+# Load downloaded images to the cluster nodes
 kind load docker-image nginx:1.14.2 --name k8s-cluster
-# Apply deployment
+kind load docker-image jenkins/jenkins:lts --name k8s-cluster
+# Apply deployments manifests
 kubectl apply -f ./content/deployments/
 # Wait for pods status=running
-#echo "Waiting for nginx pods STATUS to be RUNNING"
-#kubectl wait --for=jsonpath='{.status.phase}'=Running pod -l app=nginx1.14.2 
-# Wait untill nginx web app curl response code 200 (timeout in 20s if not 200)
-#echo "Waiting for nginx web app response code 200 (timeout 20)"
-#timeout 60 sh -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' k8s-cluster-control-plane:30080)" != "200" ]]; do sleep 5; done && echo nginx app running'
+echo "Waiting for pods STATUS to be RUNNING with spefied label..."
+kubectl wait --for=jsonpath='{.status.phase}'=Running pod -l workload=cicd  
+# Wait untill app curl on specified port produces response code 200 (timeout if not 200)
+echo "checking for jenkins app..."
+timeout 200 sh -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' k8s-cluster-control-plane:30082)" != "200" ]]; do sleep 5; done && echo jenkins app running'
+
