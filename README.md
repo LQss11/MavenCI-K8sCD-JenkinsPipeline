@@ -11,11 +11,11 @@ docker-compose up -d --build
 ## Create kind test cluster
 in order to create kind cluster you will need to run the script and it will ask you to specify how many control-plane(managers) and worker nodes you need:
 ```sh
-docker exec -it kind-cluster ./content/scripts/cluster-setup.sh
+docker exec -it kind-cluster "./content/scripts/cluster-setup.sh"
 ```
 you can make sure that the cluster is working properly you can run to test a deployment:
 ```sh
-docker exec -t kind-cluster sh -c "./content/scripts/deploy-nginx.sh"
+docker exec -t kind-cluster sh -c "./content/scripts/deploy.sh"
 ```
 Before stopping the stack you must need to remove the kind cluster containers created on your host machine for now by running:
 ```sh
