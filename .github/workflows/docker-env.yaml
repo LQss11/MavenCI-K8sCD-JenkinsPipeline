@@ -38,13 +38,13 @@ jobs:
       
       # Validate cluster nodes
       - name: Get cluster nodes
-        run: docker exec -i kind-cluster kubectl get nodes
+        run: sleep 10 ; docker exec -i kind-cluster kubectl get nodes
       
-      # Pull nginx image and apply deployment
-      - name: Pull nginx and apply deployment
+      # Pull image and apply deployment
+      - name: Pull and apply deployments
         # Could use kind load docker-image nginx:1 --name k8s-cluster to download image to avoid timout error
-        # Also could use kubectl wait --for=condition=ready pod -l app=nginx1.14.2 --timeout=30s
-        run: docker exec -i kind-cluster sh -c "chmod +x ./content/scripts/deploy-nginx.sh && ./content/scripts/deploy-nginx.sh"
+        # Also could use kubectl wait --for=condition=ready pod -l app=appname --timeout=30s
+        run: docker exec -i kind-cluster sh -c "chmod +x ./content/scripts/deploy.sh && ./content/scripts/deploy.sh"
       
       # Check k8s resources
       - name: Get k8s resources
