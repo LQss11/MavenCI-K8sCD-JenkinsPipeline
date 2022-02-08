@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonar
+spec:
+  selector:
+    matchLabels:
+      app: sonar
+      workload: cicd
+  replicas: 1
+  template: 
+    metadata:
+      labels:
+        app: sonar
+        workload: cicd
+    spec:
+      containers:
+      # For depends on you can either use helm chart
+      # or just specify the db container here
+      - name: sonar
+        image: sonarqube:7.6-community
+        env:
+        - name: USER_LOGIN
+          value: "admin"
+        - name: USER_NAME
+          value: "admin"
+        - name: USER_PASSWORD
+          value: "admin"                  
+      restartPolicy: Always        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonar-service
+spec:
+  selector:
+    app: sonar
+    workload: cicd
+  ports:
+    - name: http
+      port: 9000
+      nodePort: 30083
+  type: NodePort
