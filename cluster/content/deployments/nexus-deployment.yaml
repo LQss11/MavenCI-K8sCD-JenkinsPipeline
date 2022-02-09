@@ -17,7 +17,14 @@ spec:
       containers:
       - name: nexus
         image: sonatype/nexus3:3.37.0
-      restartPolicy: Always        
+        volumeMounts:
+        - name: nexus-persistent-storage
+          mountPath: /nexus-data
+      volumes:
+      - name: nexus-persistent-storage
+        persistentVolumeClaim:
+          claimName: nexus-pv-claim              
+      restartPolicy: Always  
 ---
 apiVersion: v1
 kind: Service
