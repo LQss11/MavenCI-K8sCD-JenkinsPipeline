@@ -5,6 +5,8 @@
 # # Load downloaded images to the cluster nodes
 # kind load docker-image nginx:1.14.2 --name k8s-cluster
 
+# Apply PV and PVC
+kubectl apply -f ./content/deployments/storage
 # Apply secrets
 kubectl apply -f ./content/deployments/secrets
 # Apply deployments manifests
