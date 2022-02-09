@@ -33,7 +33,7 @@ jobs:
         run: docker ps -a  
 
       # Create cluster
-      - name: Create kind cluster with 2 control-plane nodes and 3 worker nodes
+      - name: Create kind cluster with 1 control-plane nodes and 1 worker nodes
         run: docker exec -i kind-cluster sh -c "chmod +x ./content/scripts/cluster-setup.sh && echo -e '1\n1' | ./content/scripts/cluster-setup.sh"
       
       # Validate cluster nodes
