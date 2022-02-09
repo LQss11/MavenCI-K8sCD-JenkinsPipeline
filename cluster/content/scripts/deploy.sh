@@ -13,6 +13,8 @@
 # kind load docker-image sonatype/nexus3:3.37.0 --name k8s-cluster
 # kind load docker-image phpmyadmin/phpmyadmin:5.1.1 --name k8s-cluster
 # kind load docker-image sonarqube:7.6-community --name k8s-cluster
+# Apply secrets
+kubectl apply -f ./content/deployments/secrets
 # Apply deployments manifests
 kubectl apply -f ./content/deployments/
 # Wait for pods status=running
