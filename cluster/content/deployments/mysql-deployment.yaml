@@ -7,6 +7,8 @@ spec:
     matchLabels:
       app: mysql
       workload: cicd
+  strategy:
+    type: Recreate      
   replicas: 1
   template: 
     metadata:
@@ -28,6 +30,13 @@ spec:
              secretKeyRef:
                 name: mysql-secret
                 key: mysql-root-pass
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim              
       restartPolicy: Always        
 ---
 apiVersion: v1
