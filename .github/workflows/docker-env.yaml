@@ -50,14 +50,10 @@ jobs:
       - name: Get k8s resources
         run: docker exec -i kind-cluster kubectl get all
       
-      # Delete deployment resources
-      - name: Delete deployed resources
-        run: docker exec -i kind-cluster kubectl delete -f ./content/deployments/
-
-      # Delete cluster
-      - name: Delete kind cluster nodes
-        run: docker exec -i kind-cluster kind delete cluster --name k8s-cluster       
+      # Delete deployments + secrets then delete cluster
+      - name: Purge cluster
+        run: docker exec -i kind-cluster "chmod +x ./content/scripts/purge.sh && ./content/scripts/purge.sh"     
 
       # Stop docker compose stack
-      - name: Delete kind cluster nodes
+      - name: Drop docker stack
         run: docker-compose down   
