@@ -52,7 +52,7 @@ jobs:
       
       # Delete deployments + secrets then delete cluster
       - name: Purge cluster
-        run: docker exec -i kind-cluster "chmod +x ./content/scripts/purge.sh && ./content/scripts/purge.sh"     
+        run: docker exec -i kind-cluster sh -c "chmod +x ./content/scripts/purge.sh && ./content/scripts/purge.sh"     
 
       # Stop docker compose stack
       - name: Drop docker stack
