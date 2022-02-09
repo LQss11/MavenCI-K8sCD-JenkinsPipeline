@@ -21,11 +21,20 @@ spec:
         image: sonarqube:7.6-community
         env:
         - name: USER_LOGIN
-          value: "admin"
+          valueFrom:
+             secretKeyRef:
+                name: sonarqube-secret
+                key: user-login
         - name: USER_NAME
-          value: "admin"
+          valueFrom:
+             secretKeyRef:
+                name: sonarqube-secret
+                key: user-name
         - name: USER_PASSWORD
-          value: "admin"                  
+          valueFrom:
+             secretKeyRef:
+                name: sonarqube-secret
+                key: user-password              
       restartPolicy: Always        
 ---
 apiVersion: v1
