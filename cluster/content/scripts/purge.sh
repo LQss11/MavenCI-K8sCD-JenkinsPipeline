@@ -1,4 +1,6 @@
 #!/bin/sh
+
+
 # delete deployments manifests
 echo "##########################"
 echo "   Deleting Deployments   "
@@ -14,6 +16,11 @@ echo "##########################"
 echo "     Deleting Volumes     "
 echo "##########################"
 kubectl delete -f ./content/stack/devops-cicd/storage/
+# Delete namespace
+echo "##########################"
+echo "    Deleting namespace    "
+echo "##########################"
+kubectl delete -f ./content/stack/devops-cicd/namespace.yaml
 
 # Delete Cluster
 echo "##########################"
