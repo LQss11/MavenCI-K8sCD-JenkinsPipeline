@@ -20,7 +20,14 @@ spec:
       - name: jenkins
         image: jenkins/jenkins:latest
         #imagePullPolicy: Never            
-      restartPolicy: Always        
+        volumeMounts:
+        - name: jenkins-persistent-storage
+          mountPath: /var/lib/jenkins
+      volumes:
+      - name: jenkins-persistent-storage
+        persistentVolumeClaim:
+          claimName: jenkins-pv-claim              
+      restartPolicy: Always          
 ---
 apiVersion: v1
 kind: Service
