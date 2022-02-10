@@ -8,8 +8,7 @@ FROM alpine AS kubectl
 ARG ARCH=amd64
 ARG KUBERNETES_RELEASE=v1.23.3
 WORKDIR /usr/local/bin
-RUN apk --no-cache add curl
-RUN  curl -fsSLO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_RELEASE}/bin/linux/${ARCH}/kubectl \
+RUN wget https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_RELEASE}/bin/linux/${ARCH}/kubectl -O kubectl\
     && chmod +x kubectl
 
 # Final docker dind (alpine) image content
