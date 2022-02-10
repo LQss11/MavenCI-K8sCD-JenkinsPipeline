@@ -47,9 +47,13 @@ jobs:
         run: docker exec -i kind-cluster sh -c "chmod +x ./content/scripts/deploy.sh && ./content/scripts/deploy.sh"
       
       # Check k8s resources
-      - name: Get k8s resources
-        run: docker exec -i kind-cluster kubectl get all
+      - name: Get cluster resources
+        run: docker exec -i kind-cluster kubectl get all -o wide
       
+      # Check k8s persistent volumes
+      - name: Get cluster persistent volumes
+        run: docker exec -i kind-cluster sh -c "kubectl get pv -o wide && kubectl get pvc -o wide"
+
       # Delete deployments + secrets then delete cluster
       - name: Purge cluster
         run: docker exec -i kind-cluster sh -c "chmod +x ./content/scripts/purge.sh && ./content/scripts/purge.sh"     
