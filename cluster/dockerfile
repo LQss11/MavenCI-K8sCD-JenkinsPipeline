@@ -14,6 +14,7 @@ RUN  curl -fsSLO https://storage.googleapis.com/kubernetes-release/release/${KUB
 
 # Final docker dind (alpine) image content
 FROM docker:dind as runtime 
+
 # Copy kind binaries
 COPY --from=kind /go/bin/kind /bin/kind
 # Copy kubectl binaries
@@ -22,8 +23,5 @@ COPY --from=kubectl /usr/local/bin/kubectl /bin/kubectl
 COPY /content /content
 # Download curl bins
 RUN apk --no-cache add curl
-# Run ssh daemon
-RUN apk --no-cache add openssh-server
-EXPOSE 22
-RUN ssh-keygen -A
-CMD [ "sh","-c","/usr/sbin/sshd && sh"]
+
+ENTRYPOINT [ "sh" ]
