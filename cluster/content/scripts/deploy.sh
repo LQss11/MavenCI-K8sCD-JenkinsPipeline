@@ -5,6 +5,11 @@
 # # Load downloaded images to the cluster nodes
 # kind load docker-image nginx:1.14.2 --name k8s-cluster
 
+# Apply namespace
+echo "##########################"
+echo "    Applying namespace    "
+echo "##########################"
+kubectl apply -f ./content/stack/devops-cicd/namespace.yaml
 # Apply PV and PVC
 echo "##########################"
 echo "Applying all PVs and PVCs"
