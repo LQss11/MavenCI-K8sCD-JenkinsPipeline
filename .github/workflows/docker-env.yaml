@@ -48,11 +48,11 @@ jobs:
       
       # Check k8s resources
       - name: Get cluster resources
-        run: docker exec -i kind-cluster kubectl get all -o wide
+        run: docker exec -i kind-cluster kubectl get all -n devops-cicd -o wide
       
       # Check k8s persistent volumes
       - name: Get cluster persistent volumes
-        run: docker exec -i kind-cluster sh -c "kubectl get pv -o wide && kubectl get pvc -o wide"
+        run: docker exec -i kind-cluster sh -c "kubectl get pv -n devops-cicd -o wide && kubectl get pvc -n devops-cicd -o wide"
 
       # Delete deployments + secrets then delete cluster
       - name: Purge cluster
