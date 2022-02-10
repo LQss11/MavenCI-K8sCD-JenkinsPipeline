@@ -3,17 +3,17 @@
 echo "##########################"
 echo "   Deleting Deployments   "
 echo "##########################"
-kubectl delete -f ./content/deployments/
+kubectl delete -f ./content/stack/devops-cicd/deployments/
 # delete secrets
 echo "##########################"
 echo "     Deleting Secrets     "
 echo "##########################"
-kubectl delete -f ./content/deployments/secrets
+kubectl delete -f ./content/stack/devops-cicd/secrets/
 # delete storages
 echo "##########################"
 echo "     Deleting Volumes     "
 echo "##########################"
-kubectl delete -f ./content/deployments/storage
+kubectl delete -f ./content/stack/devops-cicd/storage/
 
 # Delete Cluster
 echo "##########################"

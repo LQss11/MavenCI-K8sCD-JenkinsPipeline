@@ -9,17 +9,17 @@
 echo "##########################"
 echo "Applying all PVs and PVCs"
 echo "##########################"
-kubectl apply -f ./content/deployments/storage
+kubectl apply -f ./content/stack/devops-cicd/storage/
 # Apply secrets
 echo "##########################"
 echo "      Applying Secrets    "
 echo "##########################"
-kubectl apply -f ./content/deployments/secrets
+kubectl apply -f ./content/stack/devops-cicd/secrets/
 # Apply deployments manifests
 echo "##########################"
 echo "   Applying Deployments   "
 echo "##########################"
-kubectl apply -f ./content/deployments/
+kubectl apply -f ./content/stack/devops-cicd/deployments/
 # Wait for pods status=running
 echo "##########################"
 echo "   Checking Pods Status   "
