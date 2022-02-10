@@ -1,20 +1,6 @@
 version: '3.8'
 
 services:
-  jenkins:
-    #image: jenkins/jenkins:lts
-    build:
-      context: ./jenkins
-      args:  
-        - MAVEN_V=${MAVEN_VERSION}  #Specify maven version in dotenv      
-    container_name: jenkins    
-    restart: always     
-    ports:
-      - '20080:8080'
-    volumes:
-      - jenkins_data:/var/jenkins_home
-    networks:
-      - cicd
   cluster:
     build:
       context: ./cluster
@@ -26,13 +12,8 @@ services:
         - /usr/bin/docker:/usr/bin/docker
     tty: true        
     networks:
-      - kind-net
-      - cicd        
-volumes:
-  jenkins_data:
+      - kind-net 
 networks:
   kind-net:
     driver: bridge
     name: kind
-  cicd:
-    driver: bridge
