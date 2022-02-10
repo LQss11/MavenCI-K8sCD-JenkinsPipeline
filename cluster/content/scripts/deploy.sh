@@ -6,13 +6,24 @@
 # kind load docker-image nginx:1.14.2 --name k8s-cluster
 
 # Apply PV and PVC
+echo "##########################"
+echo "Applying all PVs and PVCs"
+echo "##########################"
 kubectl apply -f ./content/deployments/storage
 # Apply secrets
+echo "##########################"
+echo "      Applying Secrets    "
+echo "##########################"
 kubectl apply -f ./content/deployments/secrets
 # Apply deployments manifests
+echo "##########################"
+echo "   Applying Deployments   "
+echo "##########################"
 kubectl apply -f ./content/deployments/
 # Wait for pods status=running
-echo "Waiting for pods STATUS to be RUNNING with spefied label..."
+echo "##########################"
+echo "   Checking Pods Status   "
+echo "##########################"
 kubectl wait --for=jsonpath='{.status.phase}'=Running pod -l workload=cicd  --timeout 3m # Will stop if reach timeout
 # Wait untill app curl on specified port produces response code 200 (timeout if not 200)
 #echo "checking for jenkins app..."
