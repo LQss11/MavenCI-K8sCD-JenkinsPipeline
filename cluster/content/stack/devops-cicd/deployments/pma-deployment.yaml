@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pma
+  namespace: devops-cicd    
 spec:
   selector:
     matchLabels:
@@ -13,7 +14,8 @@ spec:
     metadata:
       labels:
         app: pma 
-        workload: cicd        
+        workload: cicd   
+      namespace: devops-cicd               
     spec:
       containers:
       - name: pma
@@ -27,6 +29,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: pma-service
+  namespace: devops-cicd  
 spec:
   selector:
     app: pma
