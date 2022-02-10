@@ -14,7 +14,7 @@ spec:
       labels:
         app: sonar
         workload: cicd
-    namespace: devops-cicd          
+      namespace: devops-cicd          
     spec:
       containers:
       # For depends on you can either use helm chart
