@@ -1,19 +1,29 @@
 version: '3.8'
 
-services:
-  cluster:
-    build:
-      context: ./cluster
-    #image:  golang:1.17-alpine -> docker dind alpine
-    container_name: kind-cluster
-    restart: always     
-    volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /usr/bin/docker:/usr/bin/docker
-    tty: true        
-    networks:
-      - kind-net 
 networks:
   kind-net:
     driver: bridge
     name: kind
+volumes:
+  jenkins_data:
+
+services:
+  cluster:
+    build:
+      context: ./cluster
+      args:
+        - MAVEN_V=${MAVEN_VERSION}  #Specify maven version in dotenv     
+    #image:  alpine -> jenkins/jenkins:lts (jdk11)
+    container_name: kind-cluster
+    restart: always         
+    ports:
+      - '20080:8080'    
+    volumes:
+        - jenkins_data:/var/jenkins_home
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /usr/bin/docker:/usr/bin/docker
+        - ./cluster/content:/content        
+    tty: true      
+    privileged: true
+    networks:
+      - kind-net 

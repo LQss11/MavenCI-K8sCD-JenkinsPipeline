@@ -1,26 +1,53 @@
-FROM golang:1.17-alpine as kind
-RUN go install sigs.k8s.io/kind@v0.11.1
-
 # Download Kubectl binaries
-FROM alpine AS kubectl
-
-# Kubernetes version
+FROM alpine AS kubectl-kind
 ARG ARCH=amd64
-ARG KUBERNETES_RELEASE=v1.23.3
+
 WORKDIR /usr/local/bin
+# Download Kubernetes release
+ARG KUBERNETES_RELEASE=v1.23.3
 RUN wget https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_RELEASE}/bin/linux/${ARCH}/kubectl -O kubectl\
     && chmod +x kubectl
 
-# Final docker dind (alpine) image content
-FROM docker:dind as runtime 
+# Download Kind release
+# https://github.com/kubernetes-sigs/kind/releases 
+ARG KIND_RELEASE=v0.11.1
+RUN wget https://github.com/kubernetes-sigs/kind/releases/download/${KIND_RELEASE}/kind-linux-${ARCH} -O kind \
+    && chmod +x kind
 
+
+# Final docker dind (alpine) image content
+FROM jenkins/jenkins:lts as runtime 
 # Copy kind binaries
-COPY --from=kind /go/bin/kind /bin/kind
+COPY --from=kubectl-kind /usr/local/bin/kind /bin/kind
 # Copy kubectl binaries
-COPY --from=kubectl /usr/local/bin/kubectl /bin/kubectl
+COPY --from=kubectl-kind /usr/local/bin/kubectl /bin/kubectl
 # Copy necessary directories
 COPY /content /content
-# Download curl bins
-RUN apk --no-cache add curl
 
-ENTRYPOINT [ "sh" ]
+USER root
+
+# Install docker pipeline plugin
+RUN jenkins-plugin-cli --plugins docker-workflow:1.27
+
+# install wget
+RUN apt-get update && apt-get install -y wget curl
+
+# Download maven binaries
+ARG MAVEN_V
+RUN wget --no-verbose -O /tmp/apache-maven-$MAVEN_V-bin.tar.gz http://apache.cs.utah.edu/maven/maven-3/$MAVEN_V/binaries/apache-maven-$MAVEN_V-bin.tar.gz
+# install maven
+RUN tar xzf /tmp/apache-maven-$MAVEN_V-bin.tar.gz -C /opt/ \
+    && ln -s /opt/apache-maven-$MAVEN_V /opt/maven \
+    && ln -s /opt/maven/bin/mvn /usr/local/bin \
+    && rm -f /tmp/apache-maven-$MAVEN_V-bin.tar.gz
+RUN chown -R jenkins:jenkins /opt/maven
+# Setup maven home
+ENV MAVEN_HOME /opt/maven
+
+# Remove Cache
+RUN rm -rf /var/cache/apt/*
+# volume for Jenkins settings
+VOLUME /var/jenkins_home
+
+# To use host unix docker socket we need root
+# USER jenkins
