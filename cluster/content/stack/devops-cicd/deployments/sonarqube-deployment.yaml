@@ -37,27 +37,27 @@ spec:
               secretKeyRef:
                   name: sonarqube-secret
                   key: user-password              
-        volumeMounts:
-          - name: sonar-data-persistent-storage
-            mountPath: /opt/sonarqube/data
-          - name: sonar-logs-persistent-storage
-            mountPath: /opt/sonarqube/logs
-      initContainers:
-        - name: volume-mount-hack
-          image: busybox
-          command: ["sh", "-c", "chown -R 200:200 /opt/sonarqube/data && chown -R 200:200 /opt/sonarqube/logs"]
-          volumeMounts:
-            - name: sonar-data-persistent-storage
-              mountPath: /opt/sonarqube/data
-            - name: sonar-logs-persistent-storage
-              mountPath: /opt/sonarqube/logs           
-      volumes:
-        - name: sonar-data-persistent-storage
-          persistentVolumeClaim:
-            claimName: sonar-data-pv-claim    
-        - name: sonar-logs-persistent-storage
-          persistentVolumeClaim:
-            claimName: sonar-logs-pv-claim                               
+      #   volumeMounts:
+      #     - name: sonar-data-persistent-storage
+      #       mountPath: /opt/sonarqube/data
+      #     - name: sonar-logs-persistent-storage
+      #       mountPath: /opt/sonarqube/logs
+      # initContainers:
+      #   - name: volume-mount-hack
+      #     image: busybox
+      #     command: ["sh", "-c", "chown -R 200:200 /opt/sonarqube/data && chown -R 200:200 /opt/sonarqube/logs"]
+      #     volumeMounts:
+      #       - name: sonar-data-persistent-storage
+      #         mountPath: /opt/sonarqube/data
+      #       - name: sonar-logs-persistent-storage
+      #         mountPath: /opt/sonarqube/logs           
+      # volumes:
+      #   - name: sonar-data-persistent-storage
+      #     persistentVolumeClaim:
+      #       claimName: sonar-data-pv-claim    
+      #   - name: sonar-logs-persistent-storage
+      #     persistentVolumeClaim:
+      #       claimName: sonar-logs-pv-claim                               
       restartPolicy: Always       
 ---
 apiVersion: v1
