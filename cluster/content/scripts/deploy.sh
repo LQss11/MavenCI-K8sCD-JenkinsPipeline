@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Pull required images
 # docker image pull nginx:1.14.2
