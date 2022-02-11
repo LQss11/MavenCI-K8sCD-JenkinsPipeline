@@ -16,12 +16,20 @@ spec:
         workload: cicd
       namespace: devops-cicd          
     spec:
-      containers:
+      containers: 
       - name: nexus
         image: sonatype/nexus3:3.37.0
         volumeMounts:
         - name: nexus-persistent-storage
           mountPath: /nexus-data
+      # Give access on volume
+      initContainers:
+      - name: volume-mount-hack
+        image: busybox
+        command: ["sh", "-c", "chown -R 200:200 /nexus-data"]
+        volumeMounts:
+        - name: nexus-persistent-storage
+          mountPath: /nexus-data               
       volumes:
       - name: nexus-persistent-storage
         persistentVolumeClaim:
