@@ -34,9 +34,7 @@ println "--> Saving instance"
 instance.save()
 
 // Set the default URL
-// TODO : Update  for dynamic port
 println "--> Setting default URL"
 def jlc = JenkinsLocationConfiguration.get()
-//jlc.setUrl("http://localhost:"+env.JENKINS_PORT+"/")
-jlc.setUrl("http://localhost:20080/")
+jlc.setUrl("http://localhost:"+env.JENKINS_PORT+"/")
 jlc.save()
