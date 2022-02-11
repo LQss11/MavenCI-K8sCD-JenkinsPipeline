@@ -46,8 +46,14 @@ ENV MAVEN_HOME /opt/maven
 
 # Remove Cache
 RUN rm -rf /var/cache/apt/*
+
+CMD [ "sh","-c","/usr/local/bin/jenkins.sh && sh"]
+
+
 # volume for Jenkins settings
 VOLUME /var/jenkins_home
+
+
 
 # To use host unix docker socket we need root
 # USER jenkins

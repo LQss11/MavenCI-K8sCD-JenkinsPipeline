@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Create initial cluster config template
 cat >kind-config.yaml <<EOF
