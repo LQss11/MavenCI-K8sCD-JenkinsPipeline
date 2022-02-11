@@ -29,7 +29,7 @@ kubectl apply -f ./content/stack/devops-cicd/deployments/
 echo "##########################"
 echo "   Checking Pods Status   "
 echo "##########################"
-kubectl wait --for=jsonpath='{.status.phase}'=Running pod -l workload=cicd -n devops-cicd --timeout 6m # Will stop if reach timeout
+kubectl wait --for=jsonpath='{.status.phase}'=Running pod -l workload=cicd -n devops-cicd --timeout 4m # Will stop if reach timeout
 # Wait untill app curl on specified port produces response code 200 (timeout if not 200)
 #echo "checking for jenkins app..."
 #timeout 200 sh -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' k8s-cluster-control-plane:30082)" != "200" ]]; do sleep 5; done && echo jenkins app running'
