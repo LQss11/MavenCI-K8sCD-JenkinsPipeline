@@ -27,40 +27,6 @@ spec:
   resources:
     requests:
       storage: 200Mi  # Must be equal or greater than Storage capacity specified in pv
-
-
---- 
-# sonarqube extensions
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  namespace: devops-cicd
-  name: sonar-ext-pv
-  labels:
-    type: local
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 150Mi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/mnt/sonar/extensions/"
-    type: DirectoryOrCreate    
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  namespace: devops-cicd
-  name: sonar-ext-pv-claim
-spec:
-  storageClassName: manual
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 150Mi  # Must be equal or greater than Storage capacity specified in pv
-
 ---
 # Sonarqube logs
 apiVersion: v1
