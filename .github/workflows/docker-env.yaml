@@ -34,7 +34,7 @@ jobs:
 
       # Create cluster
       - name: Create kind cluster with 1 control-plane nodes and 1 worker nodes
-        run: docker exec -i kind-cluster sh -c "chmod +x ./content/scripts/cluster-setup.sh && echo -e '1\n1' | ./content/scripts/cluster-setup.sh"
+        run: docker exec -i kind-cluster /bin/bash -c "chmod +x ./content/scripts/cluster-setup.sh && echo -e '1\n1' | ./content/scripts/cluster-setup.sh"
       
       # Validate cluster nodes
       - name: Get cluster nodes
@@ -44,7 +44,7 @@ jobs:
       - name: Pull and apply deployments
         # Could use kind load docker-image nginx:1 --name k8s-cluster to download image to avoid timout error
         # Also could use kubectl wait --for=condition=ready pod -l app=appname --timeout=30s
-        run: docker exec -i kind-cluster sh -c "chmod +x ./content/scripts/deploy.sh && ./content/scripts/deploy.sh"
+        run: docker exec -i kind-cluster /bin/bash -c "chmod +x ./content/scripts/deploy.sh && ./content/scripts/deploy.sh"
       
       # Check k8s resources
       - name: Get cluster resources
@@ -52,11 +52,11 @@ jobs:
       
       # Check k8s persistent volumes
       - name: Get cluster persistent volumes
-        run: docker exec -i kind-cluster sh -c "kubectl get pv -n devops-cicd -o wide && kubectl get pvc -n devops-cicd -o wide"
+        run: docker exec -i kind-cluster /bin/bash -c "kubectl get pv -n devops-cicd -o wide && kubectl get pvc -n devops-cicd -o wide"
 
       # Delete deployments + secrets then delete cluster
       - name: Purge cluster
-        run: docker exec -i kind-cluster sh -c "chmod +x ./content/scripts/purge.sh && ./content/scripts/purge.sh"     
+        run: docker exec -i kind-cluster /bin/bash -c "chmod +x ./content/scripts/purge.sh && ./content/scripts/purge.sh"     
 
       # Stop docker compose stack
       - name: Drop docker stack
