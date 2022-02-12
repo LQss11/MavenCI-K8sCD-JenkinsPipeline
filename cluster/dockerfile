@@ -58,11 +58,6 @@ CMD [ "sh","-c","/usr/local/bin/jenkins.sh && sh"]
 # Skip install plugins wizard
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 
-# Jenkins default admin user name and password 
-ARG JENKINS_USER
-ARG JENKINS_PASS
-ENV JENKINS_USER $JENKINS_USER
-ENV JENKINS_PASS $JENKINS_PASS
 
 # Copy jenkins init scripts
 COPY /jenkins-scripts/ /usr/share/jenkins/ref/init.groovy.d/
