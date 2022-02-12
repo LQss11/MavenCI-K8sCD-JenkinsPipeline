@@ -12,12 +12,17 @@ services:
     build:
       context: ./cluster
       args:
-        - MAVEN_V=${MAVEN_VERSION}  #Specify maven version in dotenv     
-    #image:  alpine -> jenkins/jenkins:lts (jdk11)
+        - MAVEN_V=${MAVEN_VERSION}  #Specify maven version in dotenv 
+    environment:
+      - JENKINS_USER=${JENKINS_USER}
+      - JENKINS_PASS=${JENKINS_PASS}
+      - DOCKER_USER=${DOCKER_USER}        
+      - DOCKER_PASS=${DOCKER_PASS}
+      - JENKINS_PORT=${JENKINS_PORT}      
     container_name: kind-cluster
     restart: always         
     ports:
-      - '20080:8080'    
+      - ${JENKINS_PORT}:8080   
     volumes:
         - jenkins_data:/var/jenkins_home
         - /var/run/docker.sock:/var/run/docker.sock
