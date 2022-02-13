@@ -53,4 +53,5 @@ spec:
   ports:
     - name: http
       port: 3306
-  type: ClusterIP
+      nodePort: 30033
+  type: NodePort
