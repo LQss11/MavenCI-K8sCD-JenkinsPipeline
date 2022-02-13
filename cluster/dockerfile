@@ -29,11 +29,17 @@ COPY /content /content
 
 USER root
 
+# # Install init plugins
+# RUN jenkins-plugin-cli --plugins docker-workflow:1.27 cloudbees-folder:6.17 timestamper:1.17 \
+# ws-cleanup:0.40 pipeline-stage-view:2.21 pam-auth:1.7 pipeline-github-lib:36.v4c01db_ca_ed16 \
+# matrix-auth:3.0.1 ssh:2.6.1 build-timeout:1.20 github-branch-source:2.11.4  ssh-slaves:1.33.0 \
+# email-ext:2.87 antisamy-markup-formatter:2.7 workflow-aggregator:2.6 git:4.10.3 ldap:2.7 authorize-project
+
 # Install init plugins
-RUN jenkins-plugin-cli --plugins docker-workflow:1.27 cloudbees-folder:6.17 timestamper:1.17 \
-ws-cleanup:0.40 pipeline-stage-view:2.21 pam-auth:1.7 pipeline-github-lib:36.v4c01db_ca_ed16 \
-matrix-auth:3.0.1 ssh:2.6.1 build-timeout:1.20 github-branch-source:2.11.4  ssh-slaves:1.33.0 \
-email-ext:2.87 antisamy-markup-formatter:2.7 workflow-aggregator:2.6 git:4.10.3 ldap:2.7 authorize-project
+RUN jenkins-plugin-cli --plugins docker-workflow cloudbees-folder timestamper \
+ws-cleanup pipeline-stage-view pam-auth pipeline-github-lib \
+matrix-auth ssh build-timeout github-branch-source  ssh-slaves \
+email-ext antisamy-markup-formatter workflow-aggregator git ldap authorize-project
 
 # install wget
 RUN apt-get update && apt-get install -y wget curl
@@ -58,12 +64,15 @@ CMD [ "sh","-c","/usr/local/bin/jenkins.sh && sh"]
 # Skip install plugins wizard
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 
+# JAVA mem heap size
+#ENV JAVA_OPTS -Xmx2048m -Djava.awt.headless=true
 
 # Copy jenkins init scripts
 COPY /jenkins-scripts/ /usr/share/jenkins/ref/init.groovy.d/
 
 
-
+# Removing startup variables for security
+#CMD [ "env -u JENKINS_USER && env -u JENKINS_PASS && env -u DOCKER_USER && env -u DOCKER_PASS && env -u JENKINS_PORT" ]
 
 VOLUME /var/jenkins_home
 
