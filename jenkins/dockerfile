@@ -73,4 +73,4 @@ ENV JAVA_OPTS -Xms2g -Xmx3g
 VOLUME /var/jenkins_home
 
 # PS > To use host unix docker socket we need root
-#USER jenkins
+USER jenkins
