@@ -16,24 +16,42 @@ spec:
         workload: cicd
       namespace: devops-cicd          
     spec:
+      # securityContext:
+      #   fsGroup: 200    
       containers: 
       - name: nexus
-        image: sonatype/nexus3:3.37.0
-        volumeMounts:
-        - name: nexus-persistent-storage
-          mountPath: /nexus-data
-      # Give access on volume
-      initContainers:
-      - name: volume-mount-hack
-        image: busybox
-        command: ["sh", "-c", "chown -R 200:200 /nexus-data"]
-        volumeMounts:
-        - name: nexus-persistent-storage
-          mountPath: /nexus-data               
-      volumes:
-      - name: nexus-persistent-storage
-        persistentVolumeClaim:
-          claimName: nexus-pv-claim              
+        image: sonatype/nexus3:3.37.0  
+      #   env: 
+      #   - name: INSTALL4J_ADD_VM_PARAMS # sets the allocated resource size, which must be equal to or less than the value set by resources
+      #     value: "
+      #             -Xms1200M 
+      #             -Xmx1200M 
+      #             -XX:MaxDirectMemorySize=2G 
+      #             -XX:+UnlockExperimentalVMOptions 
+      #             -XX:+UseCGroupMemoryLimitForHeap
+      #            "        
+      #   resources: # resource limit
+      #     limits:
+      #       cpu: 1000m # is recommended to be more than 4000m. Due to limited resources, it is the minimum value
+      #       memory: 2048Mi   
+      #     requests:
+      #       cpu: 500m
+      #       memory: 1024Mi         
+      #   volumeMounts:
+      #   - name: nexus-persistent-storage
+      #     mountPath: /nexus-data
+      # # Give access on volume
+      # initContainers:
+      # - name: volume-mount-hack
+      #   image: busybox
+      #   command: ["sh", "-c", "chown -R 200:200 /nexus-data"]
+      #   volumeMounts:
+      #   - name: nexus-persistent-storage
+      #     mountPath: /nexus-data               
+      # volumes:
+      # - name: nexus-persistent-storage
+      #   persistentVolumeClaim:
+      #     claimName: nexus-pv-claim              
       restartPolicy: Always  
 ---
 apiVersion: v1
