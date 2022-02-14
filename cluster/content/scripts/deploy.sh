@@ -4,6 +4,7 @@
 # docker image pull nginx:1.14.2
 # # Load downloaded images to the cluster nodes
 # kind load docker-image nginx:1.14.2 --name k8s-cluster
+kind load docker-image lqss/jenkins --name k8s-cluster
 
 # Apply namespace
 echo "##########################"
