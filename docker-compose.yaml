@@ -29,7 +29,6 @@ services:
         - /usr/bin/docker:/usr/bin/docker
         - ./cluster/content:/content      
         - ./jenkins/jobs:/var/jenkins_home/jobs #Jobs data to be initialized
-        - "./jenkins/settings.xml:/opt/apache-maven-${MAVEN_VERSION}/conf/settings.xml" # For the nexus server setup
     tty: true      
     privileged: true
     networks:

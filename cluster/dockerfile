@@ -29,12 +29,6 @@ COPY /content /content
 
 USER root
 
-# # Install init plugins
-# RUN jenkins-plugin-cli --plugins docker-workflow:1.27 cloudbees-folder:6.17 timestamper:1.17 \
-# ws-cleanup:0.40 pipeline-stage-view:2.21 pam-auth:1.7 pipeline-github-lib:36.v4c01db_ca_ed16 \
-# matrix-auth:3.0.1 ssh:2.6.1 build-timeout:1.20 github-branch-source:2.11.4  ssh-slaves:1.33.0 \
-# email-ext:2.87 antisamy-markup-formatter:2.7 workflow-aggregator:2.6 git:4.10.3 ldap:2.7 authorize-project
-
 # Install init plugins
 RUN jenkins-plugin-cli --plugins docker-workflow cloudbees-folder timestamper \
 ws-cleanup pipeline-stage-view pam-auth pipeline-github-lib \
@@ -71,8 +65,9 @@ ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 COPY /jenkins-scripts/ /usr/share/jenkins/ref/init.groovy.d/
 
 
-# Removing startup variables for security
-#CMD [ "env -u JENKINS_USER && env -u JENKINS_PASS && env -u DOCKER_USER && env -u DOCKER_PASS && env -u JENKINS_PORT" ]
+# For the nexus server setup
+COPY /settings.xml /opt/apache-maven-$MAVEN_V/conf/settings.xml
+
 
 VOLUME /var/jenkins_home
 
