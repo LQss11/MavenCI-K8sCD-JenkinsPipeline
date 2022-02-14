@@ -32,6 +32,10 @@ jobs:
       - name: Check running containers (Jenkins + docker dind)
         run: docker ps -a  
 
+      # Build jenkins image to be used in k8s cluster
+      - name: Build jenkins image
+        run: docker build --build-arg  MAVEN_V=3.5.4 -t lqss/jenkins . 
+
       # Create cluster
       - name: Create kind cluster with 1 control-plane nodes and 1 worker nodes
         run: docker exec -i kind-cluster /bin/bash -c "chmod +x ./content/scripts/cluster-setup.sh && echo -e '1\n1' | ./content/scripts/cluster-setup.sh"

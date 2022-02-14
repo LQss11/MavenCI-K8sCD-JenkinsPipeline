@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: devops-cicd      
+spec:
+  selector:
+    matchLabels:
+      app: jenkins
+      workload: cicd
+  replicas: 1
+  template: 
+    metadata:
+      namespace: devops-cicd      
+      labels:
+        app: jenkins 
+        workload: cicd        
+    spec:
+      containers:
+      # For depends on you can either use helm chart
+      # or just specify the db container here
+      - name: jenkins
+        image: lqss/jenkins
+        imagePullPolicy: Never 
+        env:
+        - name: JENKINS_USER
+          value: "admin"  
+        - name: JENKINS_PASS
+          value: "admin"     
+        - name: DOCKER_USER
+          value: "admin"     
+        - name: DOCKER_PASS
+          value: "admin"     
+        - name: JENKINS_PORT
+          value: "30090"                                                
+      restartPolicy: Always        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: devops-cicd      
+  name: jenkins-service
+spec:
+  selector:
+    app: jenkins
+    workload: cicd
+  ports:
+    - name: http
+      port: 8080
+      nodePort: 30090
+  type: NodePort
