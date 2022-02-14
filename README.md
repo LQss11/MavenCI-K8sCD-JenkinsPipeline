@@ -3,6 +3,15 @@
 Java maven continuous integration and kubernetes continious deployment with jenkins pipeline.
 * Continuous Integration: [![Build](https://github.com/LQss11/MavenCI-K8sCD-JenkinsPipeline/actions/workflows/docker-env.yaml/badge.svg?branch=main)](https://github.com/LQss11/MavenCI-K8sCD-JenkinsPipeline/actions/workflows/docker-env.yaml)
 ## Qick Start
+You have two options to run the application:
+If you already have a kubernetes cluster setup ready and running properly you can start the stack directly using the `deploy.sh` an `purge.sh` scripts and make sure to create the proper docker image for the jenkins deployment by running:
+```sh
+# Make sure to run this at the same level of the compose file
+docker build --build-arg  MAVEN_V=3.5.4 -t lqss/jenkins -f ./jenkins/dockerfile .
+```
+
+If you only have docker installed and you want to check your stack you can follow the next commands.
+
 start the app by running:
 ```sh
 docker-compose up -d --build
