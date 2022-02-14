@@ -10,26 +10,28 @@ volumes:
 services:
   cluster:
     build:
-      context: ./cluster
+      context: .
+      dockerfile: ./jenkins/dockerfile
       args:
-        - MAVEN_V=${MAVEN_VERSION}  #Specify maven version in dotenv 
+        - MAVEN_V=${MAVEN_VERSION} #Specify maven version in dotenv 
     environment:
       - JENKINS_USER=${JENKINS_USER}
       - JENKINS_PASS=${JENKINS_PASS}
-      - DOCKER_USER=${DOCKER_USER}        
+      - DOCKER_USER=${DOCKER_USER}
       - DOCKER_PASS=${DOCKER_PASS}
-      - JENKINS_PORT=${JENKINS_PORT}      
+      - JENKINS_PORT=${JENKINS_PORT}
     container_name: kind-cluster
-    restart: always         
+    restart: always
+    user: root # Use root user in compose since privileged=true
     ports:
-      - ${JENKINS_PORT}:8080   
+      - ${JENKINS_PORT}:8080
     volumes:
-        - jenkins_data:/var/jenkins_home
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /usr/bin/docker:/usr/bin/docker
-        - ./cluster/content:/content      
-        - ./jenkins/jobs:/var/jenkins_home/jobs #Jobs data to be initialized
-    tty: true      
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - ./cluster/content:/content
+      - ./jenkins/jobs:/var/jenkins_home/jobs #Jobs data to be initialized
+    tty: true
     privileged: true
     networks:
-      - kind-net 
+      - kind-net

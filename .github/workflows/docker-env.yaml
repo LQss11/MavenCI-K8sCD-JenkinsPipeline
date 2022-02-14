@@ -34,7 +34,7 @@ jobs:
 
       # Build jenkins image to be used in k8s cluster
       - name: Build jenkins image
-        run: docker build --build-arg  MAVEN_V=3.5.4 -t lqss/jenkins . 
+        run: docker build --build-arg  MAVEN_V=3.5.4 -t lqss/jenkins -f ./jenkins/dockerfile .
 
       # Create cluster
       - name: Create kind cluster with 1 control-plane nodes and 1 worker nodes
