@@ -24,13 +24,25 @@ spec:
         imagePullPolicy: Never 
         env:
         - name: JENKINS_USER
-          value: "admin"  
+          valueFrom:
+             secretKeyRef:
+              name: jenkins-secret
+              key: "jenkins-user" 
         - name: JENKINS_PASS
-          value: "admin"     
+          valueFrom:
+             secretKeyRef:
+              name: jenkins-secret
+              key: "jenkins-pass"     
         - name: DOCKER_USER
-          value: "admin"     
+          valueFrom:
+             secretKeyRef:
+              name: jenkins-secret
+              key: "docker-user"   
         - name: DOCKER_PASS
-          value: "admin"     
+          valueFrom:
+             secretKeyRef:
+              name: jenkins-secret
+              key: "docker-pass"               
         - name: JENKINS_PORT
           value: "30090"    
         volumeMounts:
