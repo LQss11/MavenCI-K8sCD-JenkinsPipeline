@@ -37,21 +37,21 @@ spec:
       #     requests:
       #       cpu: 500m
       #       memory: 1024Mi         
-      #   volumeMounts:
-      #   - name: nexus-persistent-storage
-      #     mountPath: /nexus-data
-      # # Give access on volume
-      # initContainers:
-      # - name: volume-mount-hack
-      #   image: busybox
-      #   command: ["sh", "-c", "chown -R 200:200 /nexus-data"]
-      #   volumeMounts:
-      #   - name: nexus-persistent-storage
-      #     mountPath: /nexus-data               
-      # volumes:
-      # - name: nexus-persistent-storage
-      #   persistentVolumeClaim:
-      #     claimName: nexus-pv-claim              
+        volumeMounts:
+        - name: nexus-persistent-storage
+          mountPath: /nexus-data
+      # Give access on volume
+      initContainers:
+      - name: volume-mount-hack
+        image: busybox
+        command: ["sh", "-c", "chown -R 200:200 /nexus-data"]
+        volumeMounts:
+        - name: nexus-persistent-storage
+          mountPath: /nexus-data               
+      volumes:
+      - name: nexus-persistent-storage
+        persistentVolumeClaim:
+          claimName: nexus-pv-claim              
       restartPolicy: Always  
 ---
 apiVersion: v1
