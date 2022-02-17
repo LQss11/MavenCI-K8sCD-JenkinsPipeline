@@ -28,12 +28,14 @@ spec:
         - name: JENKINS_PASS
           value: "admin"     
         - name: DOCKER_USER
-          value: "lqss"     
+          value: "admin"     
         - name: DOCKER_PASS
-          value: "lqssftw123"     
+          value: "admin"     
         - name: JENKINS_PORT
           value: "30090"    
         volumeMounts:
+          - name: jenkins-persistent-storage
+            mountPath: /var/jenkins_home      
           - name: dockersock
             mountPath: "/var/run/docker.sock"
           - name: docker
@@ -43,6 +45,9 @@ spec:
             runAsUser: 0  # Root                                                       
       restartPolicy: Always       
       volumes:
+      - name: jenkins-persistent-storage
+        persistentVolumeClaim:
+          claimName: jenkins-pv-claim         
       - name: dockersock
         hostPath:
           path: /var/run/docker.sock
