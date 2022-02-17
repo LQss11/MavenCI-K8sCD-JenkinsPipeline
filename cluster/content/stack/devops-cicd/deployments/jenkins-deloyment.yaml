@@ -28,12 +28,27 @@ spec:
         - name: JENKINS_PASS
           value: "admin"     
         - name: DOCKER_USER
-          value: "admin"     
+          value: "lqss"     
         - name: DOCKER_PASS
-          value: "admin"     
+          value: "lqssftw123"     
         - name: JENKINS_PORT
-          value: "30090"                                                
-      restartPolicy: Always        
+          value: "30090"    
+        volumeMounts:
+          - name: dockersock
+            mountPath: "/var/run/docker.sock"
+          - name: docker
+            mountPath: "/usr/bin/docker"   
+        securityContext: 
+            privileged: true     
+            runAsUser: 0  # Root                                                       
+      restartPolicy: Always       
+      volumes:
+      - name: dockersock
+        hostPath:
+          path: /var/run/docker.sock
+      - name: docker
+        hostPath:
+          path: /usr/bin/docker             
 ---
 apiVersion: v1
 kind: Service
