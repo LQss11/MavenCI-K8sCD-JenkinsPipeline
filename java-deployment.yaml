@@ -1,0 +1,36 @@
+# Deployment 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-maven
+  namespace: devops-cicd      
+
+spec:
+  selector:
+    matchLabels:
+      app: java-maven
+  replicas: 2
+  template:
+    metadata:
+      namespace: devops-cicd      
+      labels:
+        app: java-maven
+    spec:
+      containers:
+      - name: java-maven
+        image: lqss/jenkins:java
+        imagePullPolicy: Never         
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: devops-cicd      
+  name: my-service
+spec:
+  selector:
+    app: java-maven
+  ports:
+    - name: http
+      port: 8080
+      nodePort: 30111
+  type: NodePort
