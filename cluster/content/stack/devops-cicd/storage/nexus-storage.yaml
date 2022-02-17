@@ -8,7 +8,7 @@ metadata:
 spec:
   storageClassName: manual
   capacity:
-    storage: 5Gi
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
@@ -26,4 +26,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi  # Must be equal or greater than Storage capacity specified in pv
+      storage: 1Gi  # Must be equal or greater than Storage capacity specified in pv
