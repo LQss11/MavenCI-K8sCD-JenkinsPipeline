@@ -34,8 +34,6 @@ COPY --from=kubectl-kind /usr/local/bin/kubectl /bin/kubectl
 COPY /cluster/content /content
 # Copy jenkins init scripts
 COPY /jenkins/jenkins-scripts/ /usr/share/jenkins/ref/init.groovy.d/
-# For the nexus server setup
-COPY /jenkins/settings.xml /opt/apache-maven-$MAVEN_V/conf/settings.xml
 
 # Install init plugins
 RUN jenkins-plugin-cli --plugins docker-workflow cloudbees-folder timestamper \
@@ -69,6 +67,10 @@ ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 ENV MAVEN_HOME /opt/maven    
 # JAVA mem heap size
 ENV JAVA_OPTS -Xms2g -Xmx3g
+
+
+# For the nexus server setup
+COPY /jenkins/settings.xml /opt/apache-maven-$MAVEN_V/conf/settings.xml
 
 VOLUME /var/jenkins_home
 
