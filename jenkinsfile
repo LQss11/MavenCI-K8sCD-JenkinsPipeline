@@ -1,0 +1,69 @@
+pipeline {
+  environment {
+    registry = 'lqss/jenkins'
+    registryCredential = 'dockerHub'
+    dockerImage = ''
+  }  
+  agent any
+  stages {
+    stage('Git Clone') {
+      steps {
+        echo 'Cloning java maven git repo...'
+        git branch: 'java-maven', url: 'https://github.com/LQss11/MavenCI-K8sCD-JenkinsPipeline.git'
+      }
+    }
+    stage('MVN CLEAN') {
+      steps {
+        echo 'Cleaning project...'
+        sh 'mvn clean'
+      }
+    }
+    stage('Unit test') {
+      steps {
+        echo 'Running Maven unit test with JUnit...'
+        sh 'mvn test'
+      }
+    }
+    stage('Sonar Test') {
+      steps {
+        echo 'Running Sonar Test on Code Quality...'
+        sh 'mvn sonar:sonar -Dsonar.host.url=http://sonar-service:9000'
+      }
+    }
+    stage('MVN PACKAGE') {
+      steps {
+        echo 'Maven Packaging'
+        sh 'mvn package -Dmaven.test.skip=true'
+      }
+    }
+    stage('Nexus packaging') {
+      steps {
+        echo 'Storing artifact (nexus3)...'
+        sh 'mvn clean package -Dmaven.test.skip=true deploy:deploy-file -DgroupId=tn.esprit.spring -DartifactId=timesheet-devops -Dversion=1.0 -DgeneratePom=true -Dpackaging=jar  -DrepositoryId=sonartypeNexusRepo -Durl=http://nexus-service:8081/repository/maven-releases/ -Dfile=target/timesheet-devops-1.0.jar'
+      }
+    }
+    stage('Building our image') {
+      steps {
+        script {
+          dockerImageLatest = docker.build registry + ":java"		
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+        }
+      }
+    }
+    stage('Deploy image to Docker Hub') {
+      steps {
+        script {
+          docker.withRegistry('', registryCredential) {
+            dockerImage.push()
+          }
+        }
+      }
+    }
+    stage('Deploy on k8s') {
+      steps {
+        echo 'Deploying to kubernetes cluster ...'
+        sh 'kubectl apply -f ./java-deployment.yaml'
+      }
+    }	
+  }
+}
