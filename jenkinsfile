@@ -3,43 +3,31 @@ pipeline {
     registry = 'lqss/jenkins'
     registryCredential = 'dockerHub'
     dockerImage = ''
-  }
+  }  
   agent any
   stages {
-    stage('Mail Notification') {
+    stage('Git Clone') {
       steps {
-        echo 'Sending Mail'
-        mail bcc: '',
-        body: 'Jenkins Build Started',
-        cc: '',
-        from: '',
-        replyTo: '',
-        subject: 'Jenkins Job',
-        to: 'example@domain.com'
-      }
-    }
-    stage('Git') {
-      steps {
-        echo 'Cloning'
-        git branch: 'spring-for-jenkins-with-docker', url: 'https://github.com/LQss11/devops-pipeline.git'
+        echo 'Cloning java maven git repo...'
+        git branch: 'java-maven', url: 'https://github.com/LQss11/MavenCI-K8sCD-JenkinsPipeline.git'
       }
     }
     stage('MVN CLEAN') {
       steps {
-        echo 'Maven Clean'
+        echo 'Cleaning project...'
         sh 'mvn clean'
       }
     }
-    stage('MVN TEST JUNIT') {
+    stage('Unit test') {
       steps {
-        echo 'Maven Test JUnit'
+        echo 'Running Maven unit test with JUnit...'
         sh 'mvn test'
       }
     }
-    stage('MVN TEST SONAR') {
+    stage('Sonar Test') {
       steps {
-        echo 'Sonar Test Code Quality'
-        sh 'mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000'
+        echo 'Running Sonar Test on Code Quality...'
+        sh 'mvn sonar:sonar -Dsonar.host.url=http://sonar-service:9000'
       }
     }
     stage('MVN PACKAGE') {
@@ -48,15 +36,16 @@ pipeline {
         sh 'mvn package -Dmaven.test.skip=true'
       }
     }
-    stage('NEXUS') {
+    stage('Nexus packaging') {
       steps {
-        echo 'Nexus Packaging'
-        sh 'mvn clean package -Dmaven.test.skip=true deploy:deploy-file -DgroupId=tn.esprit.spring -DartifactId=timesheet-devops -Dversion=1.0 -DgeneratePom=true -Dpackaging=jar  -DrepositoryId=sonartypeNexusRepo -Durl=http://nexus3:8081/repository/maven-releases/ -Dfile=target/timesheet-devops-1.0.jar'
+        echo 'Storing artifact (nexus3)...'
+        sh 'mvn clean package -Dmaven.test.skip=true deploy:deploy-file -DgroupId=tn.esprit.spring -DartifactId=timesheet-devops -Dversion=1.0 -DgeneratePom=true -Dpackaging=jar  -DrepositoryId=sonartypeNexusRepo -Durl=http://nexus-service:8081/repository/maven-releases/ -Dfile=target/timesheet-devops-1.0.jar'
       }
     }
     stage('Building our image') {
       steps {
         script {
+          dockerImageLatest = docker.build registry + ":java"		
           dockerImage = docker.build registry + ":$BUILD_NUMBER"
         }
       }
@@ -70,32 +59,11 @@ pipeline {
         }
       }
     }
-    stage('Cleaning up Docker Image') {
+    stage('Deploy on k8s') {
       steps {
-        bat "docker rmi $registry:$BUILD_NUMBER"
+        echo 'Deploying to kubernetes cluster ...'
+        sh 'kubectl apply -f ./java-deployment.yaml'
       }
-    }
+    }	
   }
-      post {
-        success {
-        echo 'whole pipeline successful'
-        mail bcc: '',
-        body: "Project with name ${env.JOB_NAME}, with Build Number: ${env.BUILD_NUMBER}, was built successfully. to check the build result go to build URL: ${env.BUILD_URL}",
-        cc: '',
-        from: '',
-        replyTo: '',
-        subject: 'Build success',
-        to: 'example@domain.com'
-        }
-        failure {
-        echo 'pipeline failed, at least one step failed'
-        mail bcc: '',
-        body: "there was an error in  ${env.JOB_NAME}, with Build Number: ${env.BUILD_NUMBER} to check the error go to build URL: ${env.BUILD_URL}",
-        cc: '',
-        from: '',
-        replyTo: '',
-        subject: 'Build Failure',
-        to: 'example@domain.com'
-        }
-      }
 }
